@@ -64,3 +64,20 @@ db.submissions.aggregate({$addFields: {round2: {$cond: {if: {$gte: ['upvotes', 1
 // Amber's Solution
 db.submissions.updateMany( { upvotes: { $gte: 10 } },
     { $set: { round2: true } } );
+
+// Extended Challenges
+// 12. Update Helen Clark. She had a baby! Add a child, name: Melanie, age: 0.
+db.people.updateOne({first_name: "Helen", last_name: "Clark"},
+                    { $push: {children: {name: "Melanie", age: 0}}})
+
+// 13. Joan Bishop has a child named Catherine. She just had a birthday and prefers to go by
+// "Cat". In one query update the child's name to "Cat" and increment her age by one.
+
+db.people.updateOne({first_name: "Joan", last_name: "Bishop", 'children.name': "Catherine"}),
+           {$set: {"children.name": "Cat"}},
+           {$inc: {'children.age': 1}}
+           // NOT WORKING
+
+// 14. List all submissions with more downvotes than upvotes.
+db.submissions.find( {downvotes: {$gt: 'upvotes'}} )
+db.submissions.find( {'downvotes': {$gt: '$upvotes'}} )
